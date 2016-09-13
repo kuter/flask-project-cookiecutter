@@ -1,0 +1,34 @@
+#!/bin/bash
+while getopts f:t: opts; do
+   case ${opts} in
+      n) NAME=${OPTARG} ;;
+   esac
+done
+echo $FROM_VAL
+
+NAME="{{cookiecutter.project_slug}}"                                  # Name of the application
+PROJECTDIR=~/workspace/{{cookiecutter.project_slug}}                   
+SOCKFILE=~/workspace/gunicorn/run/gunicorn_{{cookiecutter.project_slug}}.sock  # we will communicte using this unix socket
+USER={{cookiecutter.full_name}}                                        # the user to run as
+GROUP=users                                       # the group to run as
+NUM_WORKERS=2                                     # how many worker processes should Gunicorn spawn
+RUNFILE=run
+echo "Starting $NAME as `whoami`"
+
+# Activate the virtual environment
+cd $PROJECTDIR
+source ~/workspace/virtualenv/{{cookiecutter.project_slug}}/bin/activate
+export PYTHONPATH=$PROJECTDIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
+exec gunicorn ${RUNFILE}:app \
+  --name $NAME \
+  --workers $NUM_WORKERS \
+  --user=$USER --group=$GROUP \
+  --bind=unix:$SOCKFILE \
+  --log-level=debug \
+  --log-file=-
