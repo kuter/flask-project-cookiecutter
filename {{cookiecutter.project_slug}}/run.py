@@ -1,1 +1,1 @@
-from grayscale import app
+from {{cookiecutter.project_slug}} import app
