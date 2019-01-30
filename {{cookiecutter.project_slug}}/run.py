@@ -1,1 +1,1 @@
-from {{cookiecutter.project_slug}} import app
+from {{cookiecutter.project_slug}} import app  # noqa
