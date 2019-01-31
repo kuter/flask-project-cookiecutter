@@ -1,4 +1,4 @@
-.PHONY: check flake8 isort pydocstyle bandit
+.PHONY: check flake8 isort pydocstyle bandit test
 
 run:
 	FLASK_APP=run.py flask run
@@ -18,5 +18,8 @@ pydocstyle:
 bandit:
 	@echo 'Check bandit ..'
 	bandit -r .
+
+test:
+	pytest
 
 check: flake8 isort pydocstyle bandit
