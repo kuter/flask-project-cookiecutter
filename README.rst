@@ -15,6 +15,7 @@ Creating project template
 -------------------------
 
 .. code:: bash
+
    $ cookiecutter https://github.com/kuter/flask-project-cookiecutter
    full_name [user]: kuter
    project_name [Sample Flask app]: Blog
